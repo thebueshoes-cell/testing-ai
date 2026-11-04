@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanSwipe - On-Demand Waste Pickup</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 5%;
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+        
+        /* Hero Section */
+        .hero {
+            display: flex;
+            height: 80vh;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+        }
+        
+        Dds uwejfuuwej d
+        .hero-text {
+            flex: 1;
+            z-index: 2;
+            
+        }
+       
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #7f8c8d;
+        }
+        
+        .cta-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        /* 3D Container */
+        #trashbin-3d {
+            flex: 1;
+            height: 100%;
+            position: relative;
+        }
+        
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* How It Works */
+        .steps {
+            padding: 80px 5%;
+            background-color: white;
+            text-align: center;
+        }
+        
+        .steps h2 {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #2c3e50;
+        }
+        
+        .step-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            width: 250px;
+            margin: 20px;
+        }
+        
+        .step-icon {
+            font-size: 3rem;
+            color: #2ecc71;
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #34495e;
+            color: white;
+            padding: 30px 5%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">CleanSwipe</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">How It Works</a>
+            <a href="#">Pricing</a>
+            <a href="#">Login</a>
+        </div>
+    </nav>
+    
+    <!-- Hero Section with 3D Model -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Waste Pickup,<br>On Your Demand</h1>
+            <p>Schedule a pickup in seconds. We handle the rest with our eco-friendly partners.</p>
+            <button class="cta-button">Request Pickup Now</button>
+        </div>
+        
+        <!-- 3D Model Container -->
+        <div id="trashbin-3d"></div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="steps">
+        <h2>How It Works</h2>
+        <div class="step-container">
+            <div class="step">
+                <div class="step-icon">📍</div>
+                <h3>Share Location</h3>
+                <p>Pin your exact pickup spot on our map</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">🗑</div>
+                <h3>Choose Waste Type</h3>
+                <p>Select from regular, recyclable, or bulky items</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">💳</div>
+                <h3>Pay Securely</h3>
+                <p>Transparent pricing with multiple payment options</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 CleanSwipe. All rights reserved.</p>
+    </footer>
+    
+    <!-- Three.js for 3D Model -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    
+    <script>
+        // Initialize Three.js Scene
+        const container = document.getElementById('trashbin-3d');
+        
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf5f5f5);
+        
+        // Camera
+        const camera = new THREE.PerspectiveCamera(
+            75, 
+            container.clientWidth / container.clientHeight, 
+            0.1, 
+            1000
+        );
+        camera.position.z = 5;
+        
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(1, 1, 1);
+        scene.add(directionalLight);
+        
+        // 3D Model - Simple trash bin (fallback if GLTF fails)
+        const createFallbackBin = () => {
+            const geometry = new THREE.CylinderGeometry(1, 0.8, 1.5, 32);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0x2ecc71,
+                shininess: 100 
+            });
+            const bin = new THREE.Mesh(geometry, material);
+            scene.add(bin);
+            return bin;
+        };
+        
+        let trashBin = createFallbackBin();
+        
+        // Try loading more complex GLTF model
+        try {
+            const loader = new THREE.GLTFLoader();
+            loader.load(
+                'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/models/gltf/trashbin/scene.gltf',
+                (gltf) => {
+                    scene.remove(trashBin); // Remove fallback
+                    trashBin = gltf.scene;
+                    trashBin.scale.set(0.5, 0.5, 0.5);
+                    scene.add(trashBin);
+                },
+                undefined,
+                (error) => {
+                    console.error('Error loading 3D model:', error);
+                }
+            );
+        } catch (e) {
+            console.log('Using fallback 3D model');
+        }
+        
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+            if (trashBin) trashBin.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+        
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+        
+        animate();
+    </script>
+</body>
+</html>
